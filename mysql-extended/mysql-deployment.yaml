@@ -1,0 +1,107 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: mysql-ex
+  name: mysql-ex
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-ex
+  template:
+     metadata:
+       labels:
+         app: mysql-ex
+     spec:
+       initContainers:
+       - name: mysql-init
+         image: busybox
+         imagePullPolicy: IfNotPresent
+         env:
+         - name: MYSQL_TEST_USER_PASSWORD
+           valueFrom:
+             secretKeyRef:
+               name: mysql-user-pwd
+               key: mysql-test-user-pwd
+         command:
+           - sh
+           - "-c"
+           - |
+             set -ex
+             rm -rf /var/lib/mysql/lost+found
+             cat > /docker-entrypoint-initdb.d/mysql-testdb-initt.sql <<EOF
+             create database testdb default character set utf8;
+             grant all on testdb.* to 'test'@'%' identified by '$MYSQL_TEST_USER_PASSWORD';
+             flush privileges;
+             EOF
+             cat > /docker-entrypoint-initdb.d/mysql-appdb-init.sql <<EOF
+             create table app(id int);
+             insert into app values(1);
+             commit;
+             EOF
+         volumeMounts:
+         - name: mysql-data
+           mountPath: /var/lib/mysql
+         - name: mysql-initdb
+           mountPath: /docker-entrypoint-initdb.d
+       containers:
+         - image: mysql:5.7
+           name: mysql
+           imagePullPolicy: IfNotPresent
+           env:
+           - name: MYSQL_ROOT_PASSWORD
+             valueFrom:
+               secretKeyRef:
+                 name: mysql-user-pwd
+                 key: mysql-root-pwd
+           - name: MYSQL_PASSWORD
+             valueFrom:
+               secretKeyRef:
+                 name: mysql-user-pwd
+                 key: mysql-app-user-pwd
+           - name: MYSQL_USER
+             value: app
+           - name: MYSQL_DATABASE
+             value: appdb
+           volumeMounts:
+           - name: mysql-data
+             mountPath: /var/lib/mysql
+           - name: mysql-initdb
+             mountPath: /docker-entrypoint-initdb.d
+           - name: mysql-config
+             mountPath: /etc/mysql/conf.d/
+           ports:
+           - name: mysql
+             containerPort: 3306
+           livenessProbe:
+             exec:
+               command:
+               - /bin/sh
+               - "-c"
+               - MYSQL_PWD="${MYSQL_ROOT_PASSWORD}"
+               - mysql -h 127.0.0.1 -u root -e "SELECT 1"
+             initialDelaySeconds: 30
+             timeoutSeconds: 5
+             successThreshold: 1
+             failureThreshold: 3
+           readinessProbe:
+             exec:
+               command:
+                 - /bin/sh
+                 - "-c"
+                 - MYSQL_PWD="${MYSQL_ROOT_PASSWORD}"
+                 - mysql -h 127.0.0.1 -u root -e "SELECT 1"
+             initialDelaySeconds: 10
+             timeoutSeconds: 1
+             successThreshold: 1
+             failureThreshold: 3
+       volumes:
+         - name: mysql-data
+           persistentVolumeClaim:
+             claimName: mysql-ex-claim
+         - name: mysql-initdb
+           emptyDir: {}
+         - name: mysql-config
+           configMap:
+             name: mysql-config

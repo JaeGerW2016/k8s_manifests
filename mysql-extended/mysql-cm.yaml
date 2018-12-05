@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-config
+data:
+  custom.cnf: |
+        [mysqld]
+        server-id=1
+        log-bin
+        expire_logs_days=7
+        sync_binlog=0
+        binlog_cache_size=1M
