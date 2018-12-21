@@ -1,0 +1,18 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: www.japseroc.tk
+  namespace: kube-system
+spec:
+  secretName: k8s-dashboard-ui-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+  - www.japseroc.tk
+  acme:
+    config:
+    - http01:
+        ingressClass: traefik
+      domains:
+      - www.japseroc.tk

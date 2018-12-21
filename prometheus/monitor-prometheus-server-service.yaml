@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: prometheus
+    chart: prometheus-6.7.0
+    component: server
+    heritage: Tiller
+    release: monitor
+  name: monitor-prometheus-server
+  selfLink: /api/v1/namespaces/monitoring/services/monitor-prometheus-server
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 9090
+  selector:
+    app: prometheus
+    component: server
+    release: monitor
+  sessionAffinity: None
+  type: NodePort
+status:
+  loadBalancer: {}

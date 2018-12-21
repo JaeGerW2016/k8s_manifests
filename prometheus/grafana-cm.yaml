@@ -1,0 +1,46 @@
+apiVersion: v1
+data:
+  dashboardproviders.yaml: |
+    apiVersion: 1
+    providers:
+    - disableDeletion: false
+      editable: true
+      folder: ""
+      name: default
+      options:
+        path: /var/lib/grafana/dashboards
+      orgId: 1
+      type: file
+  datasources.yaml: |
+    apiVersion: 1
+    datasources:
+    - access: proxy
+      isDefault: true
+      name: MYDS_Prometheus
+      type: prometheus
+      url: http://monitor-prometheus-server
+  download_dashboards.sh: |
+    #!/usr/bin/env sh
+    set -euf
+    mkdir -p /var/lib/grafana/dashboards
+  grafana.ini: |
+    [analytics]
+    check_for_updates = true
+    [grafana_net]
+    url = https://grafana.net
+    [log]
+    mode = console
+    [paths]
+    data = /var/lib/grafana/data
+    logs = /var/log/grafana
+    plugins = /var/lib/grafana/plugins
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  labels:
+    app: grafana
+    chart: grafana-1.10.0
+    heritage: Tiller
+    release: grafana
+  name: grafana
+  selfLink: /api/v1/namespaces/monitoring/configmaps/grafana

@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  annotations:
+    deprecated.daemonset.template.generation: "1"
+  creationTimestamp: null
+  generation: 1
+  labels:
+    app: prometheus
+    chart: prometheus-6.7.0
+    component: node-exporter
+    heritage: Tiller
+    release: monitor
+  name: monitor-prometheus-node-exporter
+  selfLink: /apis/apps/v1/namespaces/monitoring/daemonsets/monitor-prometheus-node-exporter
+spec:
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: prometheus
+      component: node-exporter
+      release: monitor
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: prometheus
+        component: node-exporter
+        release: monitor
+    spec:
+      containers:
+      - args:
+        - --path.procfs=/host/proc
+        - --path.sysfs=/host/sys
+        image: prom/node-exporter:v0.15.2
+        imagePullPolicy: IfNotPresent
+        name: prometheus-node-exporter
+        ports:
+        - containerPort: 9100
+          hostPort: 9100
+          name: metrics
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /host/proc
+          name: proc
+          readOnly: true
+        - mountPath: /host/sys
+          name: sys
+          readOnly: true
+      dnsPolicy: ClusterFirst
+      hostNetwork: true
+      hostPID: true
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: monitor-prometheus-node-exporter
+      serviceAccountName: monitor-prometheus-node-exporter
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - hostPath:
+          path: /proc
+          type: ""
+        name: proc
+      - hostPath:
+          path: /sys
+          type: ""
+        name: sys
+  updateStrategy:
+    type: OnDelete
+status:
+  currentNumberScheduled: 0
+  desiredNumberScheduled: 0
+  numberMisscheduled: 0
+  numberReady: 0

@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    prometheus.io/scrape: "true"
+  creationTimestamp: null
+  labels:
+    app: prometheus
+    chart: prometheus-6.7.0
+    component: node-exporter
+    heritage: Tiller
+    release: monitor
+  name: monitor-prometheus-node-exporter
+  selfLink: /api/v1/namespaces/monitoring/services/monitor-prometheus-node-exporter
+spec:
+  clusterIP: None
+  ports:
+  - name: metrics
+    port: 9100
+    protocol: TCP
+    targetPort: 9100
+  selector:
+    app: prometheus
+    component: node-exporter
+    release: monitor
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

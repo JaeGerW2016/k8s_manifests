@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    prometheus.io/scrape: "true"
+  creationTimestamp: null
+  labels:
+    app: prometheus
+    chart: prometheus-6.7.0
+    component: kube-state-metrics
+    heritage: Tiller
+    release: monitor
+  name: monitor-prometheus-kube-state-metrics
+  selfLink: /api/v1/namespaces/monitoring/services/monitor-prometheus-kube-state-metrics
+spec:
+  clusterIP: None
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: prometheus
+    component: kube-state-metrics
+    release: monitor
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
