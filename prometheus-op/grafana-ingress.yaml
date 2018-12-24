@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: grafana-ui
+  namespace: monitoring
+spec:
+  rules:
+  - host: grafana.k8s.io
+    http:
+      paths:
+      - backend:
+          serviceName: grafana
+          servicePort: service
+        path: /
+status:
+  loadBalancer: {}

@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: prometheus-k8s-ui
+  namespace: monitoring
+spec:
+  rules:
+  - host: prometheus.k8s.io
+    http:
+      paths:
+      - backend:
+          serviceName: prometheus-k8s
+          servicePort: web
+        path: /
+status:
+  loadBalancer: {}
