@@ -1,4 +1,4 @@
-#Creating a Secret Using kubectl create secret
+**Creating a Secret Using kubectl create secret**
 
 ```
 export PURPOSE=serving
