@@ -1,0 +1,29 @@
+apiVersion: autoscaling/v2alpha1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: php-apache
+  namespace: default
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1beta1
+    kind: Deployment
+    name: php-apache
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      targetAverageUtilization: 50
+  - type: Pods
+    pods:
+      metricName: packets-per-second
+      targetAverageValue: 1k
+  - type: Object
+    object:
+      metricName: requests-per-second
+      target:
+        apiVersion: extensions/v1beta1
+        kind: Ingress
+        name: main-route
+      targetValue: 10k
