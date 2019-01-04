@@ -6,8 +6,8 @@ metadata:
   labels:
     k8s-app: kube-controller-manager
 spec:
-  selector:
-    k8s-app: kube-controller-manager
+  type: ClusterIP
+  clusterIP: None
   ports:
   - name: http-metrics
     port: 10252

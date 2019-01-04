@@ -6,8 +6,8 @@ metadata:
   labels:
     k8s-app: etcd
 spec:
-  selector:
-    k8s-app: etcd
+  type: ClusterIP
+  clusterIP: None
   ports:
   - name: port
     port: 2379
