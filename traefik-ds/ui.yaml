@@ -4,6 +4,8 @@ kind: Service
 metadata:
   name: traefik-web-ui
   namespace: kube-system
+  annotations:
+    traefik.ingress.kubernetes.io/affinity: "true"
 spec:
   selector:
     k8s-app: traefik-ingress-lb
