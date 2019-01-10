@@ -298,7 +298,7 @@ spec:
         message: CoreDNS has disappeared from Prometheus target discovery.
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-corednsdown
       expr: |
-        absent(up{job="kube-dns"} == 1)
+        absent(up{job="coredns-metrics"} == 1)
       for: 15m
       labels:
         severity: critical
@@ -606,7 +606,7 @@ spec:
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-cputhrottlinghigh
       expr: "100 * sum(increase(container_cpu_cfs_throttled_periods_total{}[5m]))
         by (container_name, pod_name, namespace) \n  / \nsum(increase(container_cpu_cfs_periods_total{}[5m]))
-        by (container_name, pod_name, namespace)\n  > 25 \n"
+        by (container_name, pod_name, namespace)\n  > 55 \n"
       for: 15m
       labels:
         severity: warning
