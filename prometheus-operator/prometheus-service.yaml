@@ -5,6 +5,9 @@ metadata:
     prometheus: k8s
   name: prometheus-k8s
   namespace: monitoring
+  annotations:
+    traefik.ingress.kubernetes.io/affinity: "true"
+    traefik.ingress.kubernetes.io/session-cookie-name: "prom-cookie"
 spec:
   ports:
   - name: web
