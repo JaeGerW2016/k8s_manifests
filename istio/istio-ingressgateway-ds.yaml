@@ -1,0 +1,142 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  labels:
+    app: istio-ingressgateway
+    chart: gateways-1.0.5
+    heritage: Tiller
+    istio: ingressgateway
+    release: istio
+  name: istio-ingressgateway
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      app: istio-ingressgateway
+      istio: ingressgateway
+  template:
+    metadata:
+      annotations:
+        scheduler.alpha.kubernetes.io/critical-pod: ""
+        sidecar.istio.io/inject: "false"
+      labels:
+        app: istio-ingressgateway
+        istio: ingressgateway
+    spec:
+      nodeSelector:
+        node-role.kubernetes.io/edge: edge
+      containers:
+      - args:
+        - proxy
+        - router
+        - -v
+        - "2"
+        - --discoveryRefreshDelay
+        - 1s
+        - --drainDuration
+        - 45s
+        - --parentShutdownDuration
+        - 1m0s
+        - --connectTimeout
+        - 10s
+        - --serviceCluster
+        - istio-ingressgateway
+        - --zipkinAddress
+        - zipkin:9411
+        - --proxyAdminPort
+        - "15000"
+        - --controlPlaneAuthPolicy
+        - NONE
+        - --discoveryAddress
+        - istio-pilot:8080
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+        - name: INSTANCE_IP
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: status.podIP
+        - name: ISTIO_META_POD_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.name
+        image: docker.io/istio/proxyv2:1.0.5
+        imagePullPolicy: IfNotPresent
+        name: istio-proxy
+        ports:
+        - containerPort: 80
+          hostPort: 80
+          protocol: TCP
+        - containerPort: 443
+          hostPort: 443
+          protocol: TCP
+        - containerPort: 31400
+          hostPort: 31400
+          protocol: TCP
+        - containerPort: 15011
+          hostPort: 15011
+          protocol: TCP
+        - containerPort: 8060
+          hostPort: 8060
+          protocol: TCP
+        - containerPort: 853
+          hostPort: 853
+          protocol: TCP
+        - containerPort: 15030
+          hostPort: 15030
+          protocol: TCP
+        - containerPort: 15031
+          hostPort: 15031
+          protocol: TCP
+        - containerPort: 15090
+          hostPort: 15090
+          name: http-envoy-prom
+          protocol: TCP
+        resources:
+          requests:
+            cpu: 10m
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /etc/certs
+          name: istio-certs
+          readOnly: true
+        - mountPath: /etc/istio/ingressgateway-certs
+          name: ingressgateway-certs
+          readOnly: true
+        - mountPath: /etc/istio/ingressgateway-ca-certs
+          name: ingressgateway-ca-certs
+          readOnly: true
+      dnsPolicy: ClusterFirstWithHostNet
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: istio-ingressgateway-service-account
+      serviceAccountName: istio-ingressgateway-service-account
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: istio-certs
+        secret:
+          defaultMode: 420
+          optional: true
+          secretName: istio.istio-ingressgateway-service-account
+      - name: ingressgateway-certs
+        secret:
+          defaultMode: 420
+          optional: true
+          secretName: istio-ingressgateway-certs
+      - name: ingressgateway-ca-certs
+        secret:
+          defaultMode: 420
+          optional: true
+          secretName: istio-ingressgateway-ca-certs

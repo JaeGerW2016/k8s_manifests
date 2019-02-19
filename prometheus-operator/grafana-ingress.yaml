@@ -10,7 +10,7 @@ spec:
       paths:
       - backend:
           serviceName: grafana
-          servicePort: service
+          servicePort: http
         path: /
 status:
   loadBalancer: {}

@@ -3,6 +3,9 @@ kind: Service
 metadata:
   name: grafana
   namespace: monitoring
+  annotations:
+    traefik.ingress.kubernetes.io/affinity: "true"
+    traefik.ingress.kubernetes.io/session-cookie-name: "grafana-cookie" 
 spec:
   ports:
   - name: http

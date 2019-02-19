@@ -1,0 +1,33 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: k8s-gateway
+  namespace: istio-system
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - istio-prometheus.k8s.io
+    - istio-grafana.k8s.io
+    - istio-jaeger.k8s.io
+    - istio-kiali.k8s.io
+    tls:
+      httpsRedirect: false
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      serverCertificate: /etc/istio/ingressgateway-certs/tls.crt
+      privateKey: /etc/istio/ingressgateway-certs/tls.key
+    hosts:
+    - istio-prometheus.k8s.io
+    - istio-grafana.k8s.io
+    - istio-jaeger.k8s.io
+    - istio-kiali.k8s.io
