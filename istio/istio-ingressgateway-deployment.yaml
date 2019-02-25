@@ -37,6 +37,8 @@ spec:
         app: istio-ingressgateway
         istio: ingressgateway
     spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
       affinity:
         nodeAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:

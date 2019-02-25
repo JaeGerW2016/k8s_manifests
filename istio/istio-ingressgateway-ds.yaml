@@ -70,7 +70,7 @@ spec:
             fieldRef:
               apiVersion: v1
               fieldPath: metadata.name
-        image: docker.io/istio/proxyv2:1.0.5
+        image: docker.io/istio/proxyv2:1.0.6
         imagePullPolicy: IfNotPresent
         name: istio-proxy
         ports:

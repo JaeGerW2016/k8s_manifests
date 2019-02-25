@@ -58,15 +58,13 @@ spec:
       serviceAccountName: nfs-client-provisioner
       containers:
         - name: nfs-client-provisioner
-          #image: quay.io/external_storage/nfs-client-provisioner:latest
           image: jmgao1983/nfs-client-provisioner:latest
           volumeMounts:
             - name: nfs-client-root
               mountPath: /persistentvolumes
           env:
             - name: PROVISIONER_NAME
-              # 此处供应者名字供storageclass调用
-              value: nfs-prov-1
+              value: fuseim.pri/ifs
             - name: NFS_SERVER
               value: 192.168.2.118
             - name: NFS_PATH
@@ -74,7 +72,7 @@ spec:
       volumes:
         - name: nfs-client-root
           nfs:
-            server: 10.1.241.230
-            path: /home/share/k8s-pv
+            server: 192.168.2.118
+            path: /nfs
 
 ---
