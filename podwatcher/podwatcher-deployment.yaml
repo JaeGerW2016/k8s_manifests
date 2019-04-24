@@ -1,0 +1,42 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: podwatcher
+  name: podwatcher
+  namespace: kube-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: podwatcher
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: podwatcher
+    spec:
+      serviceAccountName: podwatcher
+      containers:
+      - image: 314315960/k8s_podwatcher:latest
+        command:
+        - k8s_podwatcher
+        - --namespace=default
+        - --smtp-host=smtp.163.com
+        - --smtp-port=465
+        - --smtp-username=grafana_bot@163.com
+        - --smtp-password=qwer1234
+        - --smtp-receivers=jgw@8531.cn
+        imagePullPolicy: IfNotPresent
+        name: podwatcher
+        resources:
+          requests:
+            cpu: 10m
+            memory: 20Mi
+          limits:
+            cpu: 50m
+            memory: 100Mi
