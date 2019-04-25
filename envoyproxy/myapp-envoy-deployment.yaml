@@ -1,0 +1,29 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: myapp-envoy
+  labels:
+    app: myapp-envoy
+spec:
+  selector:
+    matchLabels:
+      app: myapp-envoy
+  template:
+    metadata:
+      labels:
+        app: myapp-envoy
+    spec:
+      containers:
+      - name: myapp-envoy
+        image: 314315960/myapp-envoyproxy:latest
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: "ENVOY_LB_ALG"
+          value: "LEAST_REQUEST"
+        - name: "SERVICE_NAME"
+          value: "myapp"
+        ports:
+        - name: http
+          containerPort: 80
+        - name: envoy-admin
+          containerPort: 9901

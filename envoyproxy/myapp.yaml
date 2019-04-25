@@ -1,33 +1,16 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
-metadata:
+metadata: 
   name: myapp
 spec:
-  replicas: 3
-  strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
+  replicas: 1
   template:
     metadata:
       labels:
         app: myapp
     spec:
-      terminationGracePeriodSeconds: 10
       containers:
-      - name: nginx
-        image: 314315960/zero-downtime-tutorial:blue
-        imagePullPolicy: IfNotPresent
+      - name: myapp
+        image: nginx:1.10
         ports:
         - containerPort: 80
-        readinessProbe:
-          httpGet:
-            path: /healthy.html
-            port: 80
-          periodSeconds: 1
-          successThreshold: 1
-          failureThreshold: 2
-        lifecycle:
-          preStop:
-            exec:
-              command: ["/bin/sh", "-c", "rm /usr/share/nginx/html/healthy.html && sleep 10"]
