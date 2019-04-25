@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: myapp-ingress
+  name: myapp-envoy-admin-ingress
   namespace: default
 spec:
   rules:
