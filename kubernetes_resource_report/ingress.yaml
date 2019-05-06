@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: kubernetes-resource-report-ingress
+spec:
+  rules:
+  - host: kubernetes-resource-report.k8s.io
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kube-resource-report
+          servicePort: 80
+
