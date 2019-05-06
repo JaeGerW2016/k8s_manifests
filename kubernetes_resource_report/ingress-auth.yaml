@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: kubernetes-resource-report-ingress
+  annotations:
+   kubernetes.io/ingress.class: traefik
+   traefik.ingress.kubernetes.io/auth-type: "basic"
+   traefik.ingress.kubernetes.io/auth-secret: "mysecret"
+spec:
+  rules:
+  - host: kubernetes-resource-report.k8s.io
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kube-resource-report
+          servicePort: 80
+
