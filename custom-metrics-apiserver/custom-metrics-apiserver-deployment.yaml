@@ -25,9 +25,9 @@ spec:
         - --tls-cert-file=/var/run/serving-cert/serving.crt
         - --tls-private-key-file=/var/run/serving-cert/serving.key
         - --logtostderr=true
-        - --prometheus-url=http://prometheus.prom.svc:9090/
+        - --prometheus-url=http://prometheus.prom.svc:9090/ #change this url according your env
         - --metrics-relist-interval=1m
-        - --v=10
+        - --v=1
         - --config=/etc/adapter/config.yaml
         ports:
         - containerPort: 6443
