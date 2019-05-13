@@ -1,0 +1,148 @@
+---
+# Source: k8sbot-agent/templates/00-namespace.yaml
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: k8sbot
+  labels:
+    app: k8sbot-agent
+    chart: k8sbot-agent-0.0.1
+    release: k8sbot
+    heritage: Tiller
+---
+# Source: k8sbot-agent/templates/service-account-secret.yaml
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: pubsub-service-account
+  namespace: k8sbot
+type: Opaque
+data:
+  service-account.json: ewogICJ0eXBlIjogInNlcnZpY2VfYWNjb3VudCIsCiAgInByb2plY3RfaWQiOiAiazhzYm90IiwKICAicHJpdmF0ZV9rZXlfaWQiOiAiOTQ2YWJlZDZjNzVjNGY1OGIxMmMyYTE2ZjIzODg3NTZhYTk3MzM5ZSIsCiAgInByaXZhdGVfa2V5IjogIi0tLS0tQkVHSU4gUFJJVkFURSBLRVktLS0tLVxuTUlJRXZRSUJBREFOQmdrcWhraUc5dzBCQVFFRkFBU0NCS2N3Z2dTakFnRUFBb0lCQVFDZWF4cGJhdERFUlFIY1xuV2NyNHR4aEp4bkFEOVE5eVcvWXhaY2h3eTU2dWhaa0NZREFlRG9zWStUb3FlOVZRYndGRFkxU0FPd1BTcTRWN1xuUkxTT3I4cnZPcE5Dc2E5RmdjYWRxMWxmMExUVTRvN3MweWkrcEFadUxUTmpYZlpsZzN2dGNqK3ZzeXBTU0VFU1xuck8rZitrektyOUQwd0pRTHR5MTYyOXBRcUlZeEJZZTRzNEdJc01MZXliNDNFRzZNbUEraldUc0ZNQVFQdHY5VFxuRGlsWU9nWjdlNnlWSU9waVNyb3lsRDFYNkZBTWtqTXN4cmtKQ1JYbkRWQWRaYTZONlpnYktTTW5TdFVMa1hBclxuYnFOZ3dsLzhLWisxQkl3Y1lXdG1LbHkyN1BNaCtFZjl2NzN6UjZzRzdXNVZraGJIL0ZwdHhOK0dodXJsSTVkRFxuaW0xT1dKekpBZ01CQUFFQ2dnRUFEdGhIK2NHT2F4bnhWUEg0SG1yZjVJZnJGci9YMFBaVG9XamhpY3BXNWhGQVxuVjVQbVptYWorN1RkRWI2VmJHcGVncTlUNjRrOE1EbGc4bjVyY2dTQW5uN05ibDVDcDUrRDJtSUVaOEZodEtJL1xuVk90cm9jT3lrNC82UlFrNHplWHVqcjlhUHU5cDI1aUlPb1VJbG1QbzNzUnZid1A5eTRSQWg0Y0RFL1JhME15SFxuTHQ2K2pneDBJSlJ6SUJWNzlvcmZpbzVtWUZRSUp5b2hlZzZ3LzVjWDBjaUR6Z0dlcjlvS1ZidExXcFltWHhTUVxuZ0w1NnYzLzVVRmtUdDhuREcycExQMzZiY0dhWDUvQjVUdkw5QjBvSGJJc0hoMWJKQXVMZ1FFb21LKzRJendrRFxuaThMVDY4ZzhSV2VHMkthdjFlYnBRNndUVjRqS1B1OVQrRklTT3hPNUZRS0JnUURlb2RTYWlrcm0yMCtyUmpDUlxuYVIxc1lCcFlldkoweDZtUEp6NFM5aFpmK0lLNGdiT0ljSk5HeGFuRE1CMFg3VEVMZFpkbFkzaDFXRTFGc05rQlxuM0hZSEg0S3hBVEFvSGxOQWNDeEdGR2ZlNGllTjNHMHhaZDZPakZaSFN0cjlpRGgwSzI3WWcvL2Y4WEJ0Tmc0clxuOC80WWg4R0pkWlBRb0tMQm9mS0M1NTRUZlFLQmdRQzJLWFI0N3FsTWlBTWJIc2xLRFFIUE1RZ1hwZVJmN2QxcFxuS1FDaldmUm5aUTlMQjlUYnZVOEZlQlVMZEdGSnhFZG1peGZMczRxSExiNFcxTDRvMEhMWEtKMGtkUjRNdFRPMlxuampJSS83dkhUcDN0bXl6NEhyZ0JlWmQwT01IaDRXbnVjbTlCbzFiQmtEMDV6c2VsWmNHcExrcW93VUNRSjV5OFxuZ25hVFhkZFlQUUtCZ1FDa0tLZmZuQUZHNEllS1B5TW8xVjFBd0V3czJkdFZpTFBhUHBGaTRkbjF3Z1NCa0FHVlxucFl5ekxxVFNxL09INVBtNC9XZzQ5bk9uOHdoblR0TjByOTdIdWRCZ1BBUUtVUElLSGF4SHNGdzIySU5aOHlNQVxudmFDeGM0RmE2RE01cHV3Wm5MMExJYW5Xc3V5M1dwaHdpR1RnS1pubmhhOE1zcVhRS1Yzc2NHVDY4UUtCZ0diSFxuVXdrY2wzY3YwcGpOc1FMUC9mSmFGdGZJNk9iYlBhNmt6TkJkNDlFbXF3OUpkdWNZaytwaEMzYXdEbWhoajJ1alxuRlNVQXd5dHNPckdGRFZuWDZzUE5EWVRSYzhmMXdSekNkQ2F4cTlCVFlqWDY5TTkxL1pvUGNjM0liRlEzSzk2Mlxud0dGSGVKNno5R2VXYlB5OFFoMWptZ3BISjFkdWtqZW1ZS0xiTXJKOUFvR0FPTlRka1RZKzBuRk5SbVFtVFhtaFxudmpCRTNrOE91elo0U0pFazZsQTl5SHd0dEo5eE53TC8yRDdjaittVjFnd0V6aFA4WkdPRzJGRlVlT0I3UjRCbVxuSVBIdXpWSzlyd01jM2MvRkVPRzVGVEYwTEIxaUlxWjZRK0cyWHRubG5DREYyRmRUTmQyeDJEN2RoTXZRRkQrOFxuTnR4Q05PTk5XeGdpdEgyaU1HaUJwSDg9XG4tLS0tLUVORCBQUklWQVRFIEtFWS0tLS0tXG4iLAogICJjbGllbnRfZW1haWwiOiAiazhzYm90LXRqajRyM2c1dUBrOHNib3QuaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iLAogICJjbGllbnRfaWQiOiAiMTA5OTA1OTk4MDM1NDc5NzY3NzcwIiwKICAiYXV0aF91cmkiOiAiaHR0cHM6Ly9hY2NvdW50cy5nb29nbGUuY29tL28vb2F1dGgyL2F1dGgiLAogICJ0b2tlbl91cmkiOiAiaHR0cHM6Ly9vYXV0aDIuZ29vZ2xlYXBpcy5jb20vdG9rZW4iLAogICJhdXRoX3Byb3ZpZGVyX3g1MDlfY2VydF91cmwiOiAiaHR0cHM6Ly93d3cuZ29vZ2xlYXBpcy5jb20vb2F1dGgyL3YxL2NlcnRzIiwKICAiY2xpZW50X3g1MDlfY2VydF91cmwiOiAiaHR0cHM6Ly93d3cuZ29vZ2xlYXBpcy5jb20vcm9ib3QvdjEvbWV0YWRhdGEveDUwOS9rOHNib3QtdGpqNHIzZzV1JTQwazhzYm90LmlhbS5nc2VydmljZWFjY291bnQuY29tIgp9Cg==
+
+---
+# Source: k8sbot-agent/templates/rbac.yaml
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: k8sbot-agent-serviceaccount
+  namespace: k8sbot
+  labels:
+    app: k8sbot-agent
+    chart: k8sbot-agent-0.0.1
+    release: k8sbot
+    heritage: Tiller
+
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: k8sbot-k8sbot-agent-clusterrole
+  labels:
+    app: k8sbot-agent
+    chart: k8sbot-agent-0.0.1
+    release: k8sbot
+    heritage: Tiller
+rules:
+  - apiGroups:
+      - "*"
+    resources: ["*"]
+    verbs:
+      - get
+      - list
+      - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: k8sbot-k8sbot-agent-binding
+  labels:
+    app: k8sbot-agent
+    chart: k8sbot-agent-0.0.1
+    release: k8sbot
+    heritage: Tiller
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: k8sbot-k8sbot-agent-clusterrole
+subjects:
+  - kind: ServiceAccount
+    name: k8sbot-agent-serviceaccount
+    namespace: k8sbot
+
+
+
+---
+# Source: k8sbot-agent/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8sbot-k8sbot-agent
+  namespace: k8sbot
+  labels:
+    app: k8sbot-agent
+    chart: k8sbot-agent-0.0.1
+    release: k8sbot
+    heritage: Tiller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8sbot-agent
+      release: k8sbot
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: k8sbot-agent
+        release: k8sbot
+    spec:
+      serviceAccountName: k8sbot-agent-serviceaccount
+      containers:
+      - name: k8sbot-agent
+        image: "gcr.io/managedkube/k8sbot/agent:latest"
+        imagePullPolicy: Always
+        env:
+        - name: SLACK_TEAM_ID
+          value: TJJ4R3G5U
+        - name: CLUSTER_NAME
+          value: default
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /var/run/secret/cloud.google.com/service-account.json
+        - name: KUBE_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: KUBE_POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: KUBE_POD_SERVICE_ACCOUNT
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.serviceAccountName
+        
+        resources:
+          limits:
+            cpu: 250m
+            memory: 128Mi
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          
+        volumeMounts:
+        - mountPath: /var/run/secret/cloud.google.com
+          name: service-account
+        
+      volumes:
+      - name: service-account
+        secret:
+          defaultMode: 420
+          secretName: pubsub-service-account
+      
+
+      restartPolicy: Always

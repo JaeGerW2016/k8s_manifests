@@ -4,11 +4,11 @@ metadata:
   name: grafana-claim
   namespace: monitoring
   annotations:
-    volume.beta.kubernetes.io/storage-class: "default"
+    volume.beta.kubernetes.io/storage-class: "nfs-dynamic-class"
 spec:
   accessModes:
     - ReadWriteMany
   resources:
     requests:
-      storage: 1Mi
+      storage: 10Mi
 
