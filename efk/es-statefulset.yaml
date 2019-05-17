@@ -24,15 +24,15 @@ spec:
     spec:
       serviceAccountName: elasticsearch-logging
       containers:
-      - image: anjia0532/google-containers.elasticsearch:v6.3.0
+      - image: elastic/elasticsearch:6.7.2
         name: elasticsearch-logging
         resources:
           limits:
             cpu: 1000m
-            memory: 500Mi
+            memory: 2Gi
           requests:
-            cpu: 500m
-            memory: 256Mi
+            cpu: 1000m
+            memory: 1Gi
         ports:
         - containerPort: 9200
           name: db
@@ -49,9 +49,9 @@ spec:
             fieldRef:
               fieldPath: metadata.namespace
         - name: ES_JAVA_OPTS
-          value: -Xms256m -Xmx256m
+          value: -Xms1024m -Xmx1024m
         - name: MAX_LOCAL_STORAGE_NODES
-          value: "2"
+          value: "1"
       volumes:
       - name: elasticsearch-logging
         persistentVolumeClaim:

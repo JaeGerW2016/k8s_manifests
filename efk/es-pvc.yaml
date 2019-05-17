@@ -4,7 +4,7 @@ metadata:
   name: es-claim
   namespace: kube-system
   annotations:
-    volume.beta.kubernetes.io/storage-class: "default"
+    volume.beta.kubernetes.io/storage-class: "nfs-dynamic-class"
 spec:
   accessModes:
     - ReadWriteMany
