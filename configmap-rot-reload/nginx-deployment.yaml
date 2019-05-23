@@ -23,6 +23,7 @@ spec:
           name: log
       - name: inotify-nginx
         image: 314315960/inotify-nginx:latest
+        imagePullPolicy: Always
         securityContext:
           capabilities:
             add:
@@ -32,11 +33,11 @@ spec:
             mountPath: /etc/nginx
         env:
           - name: FILE
-            value: "/etc/nginx/conf.d/virtualhost.conf"
+            value: "/etc/nginx/nginx.conf"
           - name: PROCESS
             value: "nginx"
           - name: SIGNAL
-            value: "HUP"
+            value: "USR1"
       volumes:
       - name: nginx-conf
         configMap:
@@ -44,7 +45,5 @@ spec:
           items:
             - key: nginx.conf
               path: nginx.conf
-            - key: virtualhost.conf
-              path: conf.d/virtualhost.conf # dig directory
       - name: log
         emptyDir: {}
