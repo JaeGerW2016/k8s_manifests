@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: nginx-ingress
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+  - host: nginx-hot-reload.k8s.io
+    http:
+      paths:
+      - backend:
+          serviceName: nginx-hot-reload
+          servicePort: 80
+

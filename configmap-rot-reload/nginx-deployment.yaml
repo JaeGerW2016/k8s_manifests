@@ -1,0 +1,50 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: nginx
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      shareProcessNamespace: true # enable shareProcessNamespace   
+      containers:
+      - name: nginx
+        image: nginx:1.10
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /etc/nginx # mount nginx-conf volumn to /etc/nginx
+          readOnly: true
+          name: nginx-conf
+        - mountPath: /var/log/nginx
+          name: log
+      - name: inotify-nginx
+        image: 314315960/inotify-nginx:latest
+        securityContext:
+          capabilities:
+            add:
+            - SYS_PTRACE
+        volumeMounts:
+          - name: nginx-conf
+            mountPath: /etc/nginx
+        env:
+          - name: FILE
+            value: "/etc/nginx/conf.d/virtualhost.conf"
+          - name: PROCESS
+            value: "nginx"
+          - name: SIGNAL
+            value: "HUP"
+      volumes:
+      - name: nginx-conf
+        configMap:
+          name: nginx-conf # place ConfigMap `nginx-conf` on /etc/nginx
+          items:
+            - key: nginx.conf
+              path: nginx.conf
+            - key: virtualhost.conf
+              path: conf.d/virtualhost.conf # dig directory
+      - name: log
+        emptyDir: {}
