@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alpine-multy
+  namespace: multy
+  labels:
+    app: alpine-multy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alpine-multy
+  template:
+    metadata:
+      labels:
+        app: alpine-multy
+    spec:
+      securityContext:
+        runAsUser: 1000
+        fsGroup: 2000
+      containers:
+      - name: alpine-multy
+        image: alpine:3.9
+        command: ["sleep", "2400"]
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false

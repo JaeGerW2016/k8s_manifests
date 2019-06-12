@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alpine-restricted
+  labels:
+    app: alpine-restricted
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alpine-restricted
+  template:
+    metadata:
+      labels:
+        app: alpine-restricted
+    spec:
+      securityContext:
+        runAsUser: 1000
+        fsGroup: 2000
+      volumes:
+      - name: sec-ctx-vol
+        emptyDir: {}
+      containers:
+      - name: alpine-restricted
+        image: alpine:3.9
+        command: ["sleep", "3600"]
+        volumeMounts:
+        - name: sec-ctx-vol
+          mountPath: /data/demo
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true

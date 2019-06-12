@@ -1,0 +1,74 @@
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: psp.one
+  annotations:
+    seccomp.security.alpha.kubernetes.io/defaultProfileName:  'runtime/default'
+    seccomp.security.alpha.kubernetes.io/allowedProfileNames: 'runtime/default'
+spec:
+  readOnlyRootFilesystem: false
+  privileged: false
+  allowPrivilegeEscalation: true
+  runAsUser:
+    rule: 'RunAsAny'
+  supplementalGroups:
+    rule: 'RunAsAny'
+  fsGroup:
+    rule: 'RunAsAny'
+  seLinux:
+    rule: 'RunAsAny'
+  volumes:
+  - configMap
+  - emptyDir
+  - secret
+---
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: psp.two
+spec:
+  readOnlyRootFilesystem: false
+  privileged: false
+  allowPrivilegeEscalation: false
+  runAsUser:
+    rule: 'MustRunAsNonRoot'
+  supplementalGroups:
+    rule: 'RunAsAny'
+  fsGroup:
+    rule: 'RunAsAny'
+  seLinux:
+    rule: 'RunAsAny'
+  volumes:
+  - configMap
+  - emptyDir
+  - secret
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: psp:multy
+  namespace: multy
+rules:
+- apiGroups:
+  - policy
+  resourceNames:
+  - psp.one
+  - psp.two
+  resources:
+  - podsecuritypolicies
+  verbs:
+  - use
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: psp:multy:binding
+  namespace: multy
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: psp:multy
+subjects:
+  - kind: ServiceAccount
+    name: replicaset-controller
+    namespace: kube-system
