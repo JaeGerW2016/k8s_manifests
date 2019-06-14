@@ -4,7 +4,6 @@
 
 replicaCount: 1
 strategyType: Recreate
-nameSpace: kube-system
 
 image:
   repository: quay.io/external_storage/nfs-client-provisioner
