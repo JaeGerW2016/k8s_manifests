@@ -3,34 +3,28 @@ kind: PodSecurityPolicy
 metadata:
   name: psp.traefik.unprivileged
 spec:
-  privileged: false
+  privileged: true
   volumes:
     - configMap
     - secret
     - hostPath
   readOnlyRootFilesystem: false
-  # Users and groups
   runAsUser:
     rule: RunAsAny
   supplementalGroups:
     rule: RunAsAny
   fsGroup:
     rule: RunAsAny
-  # Privilege Escalation
   allowPrivilegeEscalation: true
-  defaultAllowPrivilegeEscalation: false
-  # Capabilities
+  defaultAllowPrivilegeEscalation: true
   allowedCapabilities: ['NET_BIND_SERVICE']
   defaultAddCapabilities: []
   requiredDropCapabilities: []
-  # Host namespaces
   hostPID: true
   hostIPC: true
   hostNetwork: false
   hostPorts:
   - max: 65535
     min: 0
-  # SELinux
   seLinux:
-    # SELinux is unsed in CaaSP
     rule: 'RunAsAny'
