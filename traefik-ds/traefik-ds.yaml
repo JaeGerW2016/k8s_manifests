@@ -58,7 +58,7 @@ spec:
         - sh
         - -c
         - echo 65535 > /proc/sys/net/core/somaxconn
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         name: setsysctl
         securityContext:
           privileged: true 
