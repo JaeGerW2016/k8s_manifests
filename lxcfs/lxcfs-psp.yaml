@@ -1,0 +1,32 @@
+apiVersion: extensions/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: psp.lxcfs.privileged
+  annotations:
+    seccomp.security.alpha.kubernetes.io/allowedProfileNames: docker/default
+    seccomp.security.alpha.kubernetes.io/defaultProfileName: docker/default
+    apparmor.security.beta.kubernetes.io/allowedProfileNames: runtime/default
+    apparmor.security.beta.kubernetes.io/defaultProfileName: runtime/default
+spec:
+  privileged: true
+  volumes:
+    - hostPath
+  allowedHostPaths:
+    - pathPrefix: "/"
+  readOnlyRootFilesystem: true
+  runAsUser:
+    rule: RunAsAny
+  supplementalGroups:
+    rule: RunAsAny
+  fsGroup:
+    rule: RunAsAny
+  allowPrivilegeEscalation: false
+  defaultAllowPrivilegeEscalation: false
+  allowedCapabilities: []
+  defaultAddCapabilities: []
+  requiredDropCapabilities: []
+  hostPID: true
+  hostIPC: false
+  hostNetwork: false
+  seLinux:
+    rule: 'RunAsAny'
