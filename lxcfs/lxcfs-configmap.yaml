@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: remount-lxcfs
+  namespace: kube-system
+data:
+  container_remount_lxcfs.sh: |
+    #!/bin/bash
+    LXCFS="/var/lib/lxcfs"
+    containers=$(docker ps | awk '{print $2}' | grep -v Name)
+    for container in $containers;do
+        echo "remount $container"
+        PID=$(docker inspect $container | grep Pid | awk '{print $2}' | awk -F ',' '{print $1}' )
+        for file in meminfo cpuinfo stat uptime swaps diskstats;do
+                nsenter --target $PID --mount --  mount -B "$LXCFS/proc/$file" "/proc/$file"
+        done
+    done

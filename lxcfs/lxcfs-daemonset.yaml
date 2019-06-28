@@ -20,14 +20,52 @@ spec:
         effect: NoSchedule
       containers:
       - name: lxcfs
-        image: registry.cn-hangzhou.aliyuncs.com/denverdino/lxcfs:2.0.8
+        image: registry.cn-hangzhou.aliyuncs.com/denverdino/lxcfs:3.0.4
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
+          capabilities:
+            add:
+              - SYS_ADMIN
+        lifecycle:
+          postStart:
+            exec:
+              command: ["/usr/local/container_remount_lxcfs.sh"]
+          preStop:
+            exec:
+              command: ["/bin/fusermount","-u","/var/lib/lxcfs"]
         volumeMounts:
-        - name: rootfs
-          mountPath: /host
+        - name: cgroup
+          mountPath: /sys/fs/cgroup
+        - name: lxcfs
+          mountPath: /var/lib/lxcfs
+          mountPropagation: Bidirectional
+        - name: usr-local
+          mountPath: /usr/local
+        - name: fusermount
+          mountPath: /bin/fusermount
+        - name: script
+          mountPath: /usr/local/container_remount_lxcfs.sh
+          subPath: container_remount_lxcfs.sh
       volumes:
-      - name: rootfs
+      - name: cgroup
         hostPath:
-          path: /
+          path: /sys/fs/cgroup
+      - name: usr-local
+        hostPath:
+          path: /usr/local
+      - name: lxcfs
+        hostPath:
+          path: /var/lib/lxcfs
+          type: DirectoryOrCreate
+      - name: fusermount
+        hostPath:
+          path: /bin/fusermount
+      - name: script
+        configMap:
+          name: remount-lxcfs
+          defaultMode: 0755
+          items:
+          - key: container_remount_lxcfs.sh
+            path: container_remount_lxcfs.sh
+
