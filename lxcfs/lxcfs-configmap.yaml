@@ -2,7 +2,6 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: remount-lxcfs
-  namespace: kube-system
 data:
   container_remount_lxcfs.sh: |
     #!/bin/bash
@@ -15,3 +14,8 @@ data:
                 nsenter --target $PID --mount --  mount -B "$LXCFS/proc/$file" "/proc/$file"
         done
     done
+  cleanup.sh: |
+    #!/bin/bash
+    nsenter -m/proc/1/ns/mnt fusermount -u /var/lib/lxcfs 2> /dev/null || true
+    nsenter -m/proc/1/ns/mnt [ -L /etc/mtab ] || \
+               sed -i "/^lxcfs \/var\/lib\/lxcfs fuse.lxcfs/d" /etc/mtab
