@@ -24,7 +24,7 @@ spec:
           #value: https://hooks.slack.com/services/xxxxxx/xxxxxxxxxxxx 
           value: https://hooks.slack.com/services/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
         - name: SLACK_USERNAME
-          value: jasper
+          value: "Kubernetes Slack Bot"
         resources:
           requests:
             memory: 30M
