@@ -18,10 +18,13 @@ spec:
       serviceAccountName: kube-slack
       containers:
       - name: kube-slack
-        image: willwill/kube-slack:v4.1.1
+        image: willwill/kube-slack:v4.2.0
         env:
         - name: SLACK_URL
-          value: https://hooks.slack.com/services/xxxxxx/xxxxxxxxxxxx 
+          #value: https://hooks.slack.com/services/xxxxxx/xxxxxxxxxxxx 
+          value: https://hooks.slack.com/services/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
+        - name: SLACK_USERNAME
+          value: jasper
         resources:
           requests:
             memory: 30M

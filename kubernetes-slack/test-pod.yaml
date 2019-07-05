@@ -4,5 +4,5 @@ metadata:
   name: kube-slack-test
 spec:
   containers:
-  - image: willwill/inexisting
+  - image: 314315960/friendlyhello
     name: kube-slack-test
