@@ -5,7 +5,7 @@
 replicaCount: 1
 image:
   repository: 314315960/metabase-oracle
-  tag: v0.31.2
+  tag: v0.32.9
   pullPolicy: IfNotPresent
 
 # Config Jetty web server
@@ -23,14 +23,14 @@ ssl:
 # Backend database
 database:
   # Database type (h2 / mysql / postgres), default: h2
-  type: h2
+  type: mysql
   # encryptionKey: << YOUR ENCRYPTION KEY >>
   ## Only need when you use mysql / postgres
-  # host:
-  # port:
-  # dbname:
-  # username:
-  # password:
+  host: mysql-ex.default.svc
+  port: 3306
+  dbname: testdb
+  username: root
+  password: hardtoguess
   ## Alternatively, use a connection URI for full configurability. Example for SSL enabled Postgres.
   # connectionURI: postgres://user:password@host:port/database?ssl=true&sslmode=require&sslfactory=org.postgresql.ssl.NonValidatingFactory"
 
