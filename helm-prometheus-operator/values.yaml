@@ -130,8 +130,8 @@ alertmanager:
         pretext: '{{ .CommonAnnotations.summary }}'
         text: |-
           {{ range .Alerts }}
-            *Alert:* `{{ .Alert }}` - `{{ .Labels.severity }}`
-            *Description:* {{ .Annotations.message }}
+            *Alert:* {{ .Annotations.summary }} - `{{ .Labels.severity }}`
+            *Description:* {{ .Annotations.description }}
             *Details:*
             {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
             {{ end }}
@@ -847,7 +847,7 @@ prometheus:
     ##
     image:
       repository: quay.io/prometheus/prometheus
-      tag: v2.7.1
+      tag: v2.11.0
 
     ## Tolerations for use with node taints
     ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/

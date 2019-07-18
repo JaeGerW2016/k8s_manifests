@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mysql-ex-claim
+  name: postgres-pv-claim
   annotations:
     volume.beta.kubernetes.io/storage-class: "nfs-dynamic-class"
 spec:
@@ -10,3 +10,4 @@ spec:
   resources:
     requests:
       storage: 10Gi
+
