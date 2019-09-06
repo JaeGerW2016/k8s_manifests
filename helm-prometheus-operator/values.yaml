@@ -125,7 +125,7 @@ alertmanager:
     - name: slack_webhook
       slack_configs:
       - send_resolved: false
-        api_url: https://hooks.slack.com/services/xxxxxxxx/xxxxxxxxxxxxxxxxx
+        api_url: https://hooks.slack.com/services/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
         channel: alertmanager
         username: '{{ template "slack.default.username" . }}'
         color: '{{ if eq .Status "firing" }}danger{{ else }}good{{ end }}'
@@ -773,24 +773,24 @@ kubeEtcd:
   ## Configure secure access to the etcd cluster by loading a secret into prometheus and
   ## specifying security configuration below. For example, with a secret named etcd-client-cert
   ##
-  ## serviceMonitor:
-  ##   scheme: https
-  ##   insecureSkipVerify: false
-  ##   serverName: localhost
-  ##   caFile: /etc/prometheus/secrets/etcd-client-cert/etcd-ca
-  ##   certFile: /etc/prometheus/secrets/etcd-client-cert/etcd-client
-  ##   keyFile: /etc/prometheus/secrets/etcd-client-cert/etcd-client-key
-  ##
   serviceMonitor:
+    scheme: https
+    insecureSkipVerify: false
+  #  serverName: localhost
+    caFile: /etc/prometheus/secrets/etcd-client-cert/etcd-ca
+    certFile: /etc/prometheus/secrets/etcd-client-cert/etcd-client
+    keyFile: /etc/prometheus/secrets/etcd-client-cert/etcd-client-key
+  ##
+  # serviceMonitor:
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
     ##
-    interval: ""
-    scheme: http
-    insecureSkipVerify: false
-    serverName: ""
-    caFile: ""
-    certFile: ""
-    keyFile: ""
+    #  interval: ""
+    #scheme: http
+    #insecureSkipVerify: false
+    #serverName: ""
+    #caFile: ""
+    #certFile: ""
+    #keyFile: ""
 
     ## 	metric relabel configs to apply to samples before ingestion.
     ##
@@ -1381,7 +1381,8 @@ prometheus:
     ## reflected in the running Pods. To change the secrets mounted into the Prometheus Pods, the object must be deleted and recreated
     ## with the new list of secrets.
     ##
-    secrets: []
+    secrets: 
+      - etcd-client
 
     ## ConfigMaps is a list of ConfigMaps in the same namespace as the Prometheus object, which shall be mounted into the Prometheus Pods.
     ## The ConfigMaps are mounted into /etc/prometheus/configmaps/.

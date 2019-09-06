@@ -606,3 +606,30 @@ metadata:
   name: kube-proxy
   namespace: kube-system
 ```
+# how to monitor etcd with ssl
+```
+D="$(mktemp -d)"
+cp /etc/kubernetes/pki/etcd/{ca.crt,healthcheck-client.{crt,key}} $D
+kubectl create ns metrics
+kubectl -n metrics create secret generic etcd-client --from-file="$D"
+rm -fr "$D"
+```
+and then adding this to my values.yaml:
+
+```
+kubeEtcd:
+  serviceMonitor:
+    scheme: https
+    insecureSkipVerify: true
+    caFile: /etc/prometheus/secrets/etcd-client/ca.crt
+    certFile: /etc/prometheus/secrets/etcd-client/healthcheck-client.crt
+    keyFile: /etc/prometheus/secrets/etcd-client/healthcheck-client.key
+
+prometheus:
+  prometheusSpec:
+    secrets:
+      - etcd-client
+```
+then the target gets scraped properly
+
+
